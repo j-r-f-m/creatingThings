@@ -13,13 +13,16 @@ from Autodesk.Revit.DB.Structure import *
 uidoc = __revit__.ActiveUIDocument
 doc = uidoc.Document
 
-# Get the column family symbol
+# initialize variable that will hold the column family symbol
 column_family_symbol = None
+
+# get all family symbols in the document
 collector = FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements()
 
 # for element in collector:
 #     print(f"Family: {element.Family.Name}, Symbol: {element.Name}")
 
+ # iterate through the collector and find the desired column family symbol
 for element in collector:
     if element.Family.Name == 'STB Stütze - rechteckig' and element.Name == 'STB 200 x 200':
         column_family_symbol = element
@@ -48,10 +51,13 @@ print(level_0.Elevation)
 # Start a new transaction
 t = Transaction(doc, "Create column")
 t.Start()
+
+# Activate the column family symbol
 column_family_symbol.Activate()
 
-# Create a new family instance
+# define the location of the new column as x=0, y=0, z=level_0.Elevation
 location = XYZ(0, 0, level_0.Elevation)
+# Create a new family instance
 new_column = doc.Create.NewFamilyInstance(
     location, column_family_symbol, level_0, StructuralType.Column)
 
