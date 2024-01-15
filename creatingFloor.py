@@ -25,7 +25,7 @@ floor_types = FilteredElementCollector(doc).OfCategory(
 
 # points for slab
 p_1 = XYZ(0, 0, 0)
-p_2 = XYZ(10, 0, 0)
+p_2 = XYZ(30, 0, 0)
 p_3 = XYZ(10, 10, 0)
 p_4 = XYZ(0, 10, 0)
 
