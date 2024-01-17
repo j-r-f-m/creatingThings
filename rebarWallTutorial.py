@@ -1,8 +1,7 @@
 """
-This script is used to select an element and change ID-Kommentare  value.
+Select a wall and create a rebar
 """
-
-#https://www.youtube.com/watch?v=Iqp9e4oAvh8
+# Follow this tutorial: https://www.youtube.com/watch?v=Iqp9e4oAvh8
 
 import Autodesk
 
@@ -14,6 +13,7 @@ from Autodesk.Revit.DB.Structure import Rebar, RebarBarType, RebarHookType, Reba
 doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 
+# 
 collector = FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements()
 
 # for element in collector:
