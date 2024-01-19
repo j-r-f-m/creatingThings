@@ -13,21 +13,16 @@ from Autodesk.Revit.DB.Structure import Rebar, RebarBarType, RebarHookType, Reba
 doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 
-# 
-collector = FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements()
+# Collect all RebarBarType elements in the document
+collector = FilteredElementCollector(doc).OfClass(RebarBarType).ToElements()
 
-# for element in collector:
-#     print(f"Family: {element.Family.Name}, Symbol: {element.Name}")
-
- # iterate through the collector and find the desired column family symbol
-for element in collector:
-    if element.Family.Name == 'Gerader Stab' and element.Name == 'Gerader Stab':
-        reabr_family_symbol = element
+bar_type = None
+# You can loop through this list to find a specific RebarBarType
+for rebar_type in collector:
+    if rebar_type.Name == "ø10, Dmin=4ϕ":
+        bar_type = rebar_type
         break
-
-print("element: ", reabr_family_symbol.Family.Name)
-
-
+print("bar_type: ", bar_type.Name)
 
 #hide current script window
 __window__.Hide()
@@ -43,21 +38,35 @@ __window__.Topmost = True
 
 # print("selected element")
 
+# get the location curve of the wall
 curve = wall.Location.Curve
+# get the start point of the curve (x, y, z)
 p_1 = curve.GetEndPoint(0)
+# get the end point of the curve in foot
 p_2 = curve.GetEndPoint(1)
 
+print(p_1)
+print(p_2)
+
+# get the direction of the wall
 direction_y = curve.Direction
+# get the direction of the wall in x
 direction_x = direction_y.CrossProduct(XYZ.BasisZ).Normalize()
 
 print(direction_y)
 print(direction_x)
 
-# print(curve)
-# print(p_1)  
-# print(p_2)  
+# get start and end points of the rebar
+rebar_p_1 = p_1
+rebar_p2 = XYZ(p_1.X, p_1.Y, p_1.Z + 3000/304.8)
+print(rebar_p2)
 
-# with Transaction(doc, "Reinforce") as t:
-#     t.Start()
-#     rebar = Structure.Rebar.CreateFromCurves(doc, Structure.RebarStyle.Standard, bar_type, None, None, wall, direction_y, lines, Structure.RebarHookOrientation.Left, True, True)
-#     t.Commit()
+# create a line from the start and end points of the rebar
+lines = [Line.CreateBound(rebar_p_1, rebar_p2)]
+print(lines)
+
+t = Transaction(doc, "selection")
+t.Start()
+#
+rebar = Structure.Rebar.CreateFromCurves(doc, Structure.RebarStyle.Standard, bar_type, None, None, wall, direction_y, lines, Structure.RebarHookOrientation.Left,Structure.RebarHookOrientation.Left, True, True)
+t.Commit()
