@@ -70,8 +70,10 @@ cc_int = doc.GetElement(wall.get_Parameter(BuiltInParameter.CLEAR_COVER_INTERIOR
 
 # get the direction of the wall
 direction_y = curve.Direction
+print("direction_y: ", direction_y)
 # get the direction of the wall in x
 direction_x = direction_y.CrossProduct(XYZ.BasisZ).Normalize()
+print("direction_x: ", direction_x)
 
 # p_1_new = p_1 + w_width/2*direction_x
 
@@ -97,9 +99,9 @@ lines = [Line.CreateBound(rebar_p_1, rebar_p2)]
 # print(lines)
 
 # Horizontal rebar
-horizontal_x_offset = w_width/2 - cc_ext - rebar_diameter/2
-horizontal_rebar_p1 = new_point
-lines_horizontal = [Line.CreateBound(rebar_p_1, rebar_p2)]
+# horizontal_x_offset = w_width/2 - cc_ext - rebar_diameter/2
+# horizontal_rebar_p1 = new_point
+# lines_horizontal = [Line.CreateBound(rebar_p_1, rebar_p2)]
 
 # Vertical rebar layout rule:
 step = 100/304.8
@@ -116,6 +118,6 @@ rebar.get_Parameter(BuiltInParameter.REBAR_ELEM_BAR_SPACING).Set(step)
 rebar.get_Parameter(BuiltInParameter.REBAR_ELEM_QUANTITY_OF_BARS).Set(count)
 rebar.GetShapeDrivenAccessor().BarsOnNormalSide = True
 
-rebar_horizontal = Structure.Rebar.CreateFromCurves(doc, Structure.RebarStyle.Standard, bar_type, None, None, wall, direction_x, lines, Structure.RebarHookOrientation.Left,Structure.RebarHookOrientation.Left, True, True)
+# rebar_horizontal = Structure.Rebar.CreateFromCurves(doc, Structure.RebarStyle.Standard, bar_type, None, None, wall, direction_x, lines, Structure.RebarHookOrientation.Left,Structure.RebarHookOrientation.Left, True, True)
 
 t.Commit()
